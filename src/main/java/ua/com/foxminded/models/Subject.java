@@ -1,14 +1,35 @@
 package ua.com.foxminded.models;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Subject {
+    private int id;
     private String subjectName;
-    private Set<Teacher> teachers = new LinkedHashSet<>();
+    private Set<Teacher> teachers = new HashSet<>();
     private Set<Classroom> availableClassrooms;
-    
+
     public Subject(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public Subject() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
     }
 
