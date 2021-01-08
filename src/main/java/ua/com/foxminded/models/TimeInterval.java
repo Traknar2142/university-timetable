@@ -3,14 +3,14 @@ package ua.com.foxminded.models;
 import java.time.LocalDateTime;
 
 public class TimeInterval {
-    private int id;
+    private long id;
     private LocalDateTime begin, end;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

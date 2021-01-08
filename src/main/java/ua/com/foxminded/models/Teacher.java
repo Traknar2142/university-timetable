@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Teacher {
-    private int id;
+    private long id;
     private String firstName;
     private String lastName;
     private Set<Subject> taughtSubjects;
@@ -18,11 +18,11 @@ public class Teacher {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

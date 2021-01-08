@@ -3,7 +3,7 @@ package ua.com.foxminded.models;
 import java.util.List;
 
 public class DayOfWeek {
-    private int id;
+    private long id;
     private String nameOfDay;
     private List<LessonOnTimeTable> lessons;
 
@@ -16,11 +16,11 @@ public class DayOfWeek {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

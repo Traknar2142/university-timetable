@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Subject {
-    private int id;
+    private long id;
     private String subjectName;
     private Set<Teacher> teachers = new HashSet<>();
     private Set<Classroom> availableClassrooms;
@@ -17,11 +17,11 @@ public class Subject {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -13,7 +13,7 @@ public class TimeIntervalRowMapper implements RowMapper<TimeInterval> {
     public TimeInterval mapRow(ResultSet rs, int rowNum) throws SQLException {
         TimeInterval timeInterval = new TimeInterval();
 
-        timeInterval.setId(rs.getInt(1));
+        timeInterval.setId(rs.getLong(1));
         timeInterval.setBegin(rs.getTimestamp(2).toLocalDateTime());
         timeInterval.setEnd(rs.getTimestamp(3).toLocalDateTime());
         return timeInterval;

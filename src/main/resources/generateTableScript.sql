@@ -14,8 +14,8 @@ DROP TABLE IF EXISTS postgres.universityTimetable.t_time_intervals;
 
 CREATE TABLE universityTimetable.t_classroom_inaccessibility
 (
-    time_interval_id integer NOT NULL,
-    classroom_id integer NOT NULL
+    time_interval_id bigint NOT NULL,
+    classroom_id bigint NOT NULL
 )
 
 TABLESPACE pg_default;
@@ -26,7 +26,7 @@ ALTER TABLE universityTimetable.t_classroom_inaccessibility
 
 CREATE TABLE universityTimetable.t_time_intervals
 (
-    time_interval_id SERIAL,
+    time_interval_id BIGSERIAL,
     begin_time timestamp without time zone NOT NULL,
     end_time timestamp without time zone NOT NULL,
     CONSTRAINT t_time_intervals_pkey PRIMARY KEY (time_interval_id)
@@ -40,8 +40,8 @@ ALTER TABLE universityTimetable.t_time_intervals
 
 CREATE TABLE universityTimetable.t_classrooms
 (
-    classroom_id SERIAL,
-    room_number integer NOT NULL,
+    classroom_id BIGSERIAL,
+    room_number bigint NOT NULL,
     CONSTRAINT t_classrooms_pkey PRIMARY KEY (classroom_id)
 )
 
@@ -64,7 +64,7 @@ ADD CONSTRAINT t_classroom_inaccessibility_time_interval_id_fkey FOREIGN KEY (ti
 
 CREATE TABLE universityTimetable.t_teachers
 (
-    teacher_id SERIAL,
+    teacher_id BIGSERIAL,
     first_name character varying COLLATE pg_catalog."default" NOT NULL,
     last_name character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT t_teachers_pkey PRIMARY KEY (teacher_id)
@@ -78,7 +78,7 @@ ALTER TABLE universityTimetable.t_teachers
 
 CREATE TABLE universityTimetable.t_subject
 (
-    subject_id SERIAL,
+    subject_id BIGSERIAL,
     subject_name character varying COLLATE pg_catalog."default",
     CONSTRAINT t_subject_pkey PRIMARY KEY (subject_id)
 )
@@ -91,8 +91,8 @@ ALTER TABLE universityTimetable.t_subject
 
 CREATE TABLE universityTimetable.t_subject_classroom_relation
 (
-    subject_id integer NOT NULL,
-    classroom_id integer NOT NULL,
+    subject_id bigint NOT NULL,
+    classroom_id bigint NOT NULL,
     CONSTRAINT t_subject_classroom_relation_classroom_id_fkey FOREIGN KEY (classroom_id)
         REFERENCES universityTimetable.t_classrooms (classroom_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -113,8 +113,8 @@ ALTER TABLE universityTimetable.t_subject_classroom_relation
 
 CREATE TABLE universityTimetable.t_subject_teacher_relation
 (
-    subject_id integer NOT NULL,
-    teacher_id integer NOT NULL,
+    subject_id bigint NOT NULL,
+    teacher_id bigint NOT NULL,
     CONSTRAINT t_subject_teacher_relation_subject_id_fkey FOREIGN KEY (subject_id)
         REFERENCES universityTimetable.t_subject (subject_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -135,7 +135,7 @@ ALTER TABLE universityTimetable.t_subject_teacher_relation
 
 CREATE TABLE universityTimetable.t_groups
 (
-    group_id SERIAL,
+    group_id BIGSERIAL,
     group_name character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT t_groups_pkey PRIMARY KEY (group_id)
 )
@@ -148,8 +148,8 @@ ALTER TABLE universityTimetable.t_groups
     
 CREATE TABLE universityTimetable.t_subject_groups_relation
 (
-    subject_id integer NOT NULL,
-    group_id integer NOT NULL,
+    subject_id bigint NOT NULL,
+    group_id bigint NOT NULL,
     CONSTRAINT t_subject_groups_relation_group_id_fkey FOREIGN KEY (group_id)
         REFERENCES universityTimetable.t_groups (group_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -170,10 +170,10 @@ ALTER TABLE universityTimetable.t_subject_groups_relation
 
 CREATE TABLE universityTimetable.t_lesson_on_time_table
 (
-    lesson_on_table_id SERIAL,
-    subject_id integer NOT NULL,
-    classroom_id integer NOT NULL,
-    teacher_id integer NOT NULL,
+    lesson_on_table_id BIGSERIAL,
+    subject_id bigint NOT NULL,
+    classroom_id bigint NOT NULL,
+    teacher_id bigint NOT NULL,
     CONSTRAINT t_lesson_on_time_table_pkey PRIMARY KEY (lesson_on_table_id)
 )
 
@@ -185,7 +185,7 @@ ALTER TABLE universityTimetable.t_lesson_on_time_table
 
 CREATE TABLE universityTimetable.t_day_of_week
 (
-    day_of_week_id SERIAL,
+    day_of_week_id BIGSERIAL,
     name_of_day timestamp without time zone NOT NULL,
     CONSTRAINT t_day_of_week_pkey PRIMARY KEY (day_of_week_id)
 )
@@ -198,8 +198,8 @@ ALTER TABLE universityTimetable.t_day_of_week
 
 CREATE TABLE universityTimetable.t_day_of_week_lesson_on_table_relation
 (
-    day_of_week_id integer NOT NULL,
-    lesson_on_time_table_id integer NOT NULL,
+    day_of_week_id bigint NOT NULL,
+    lesson_on_time_table_id bigint NOT NULL,
     CONSTRAINT t_day_of_week_lesson_on_table_rela_lesson_on_time_table_id_fkey FOREIGN KEY (lesson_on_time_table_id)
         REFERENCES universityTimetable.t_lesson_on_time_table (lesson_on_table_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -218,8 +218,8 @@ ALTER TABLE universityTimetable.t_day_of_week_lesson_on_table_relation
 
 CREATE TABLE universityTimetable.t_time_table
 (
-    day_of_week_id integer NOT NULL,
-    group_id integer NOT NULL,
+    day_of_week_id bigint NOT NULL,
+    group_id bigint NOT NULL,
     CONSTRAINT t_time_table_day_of_week_id_fkey FOREIGN KEY (day_of_week_id)
         REFERENCES universityTimetable.t_day_of_week (day_of_week_id) MATCH SIMPLE
         ON UPDATE CASCADE

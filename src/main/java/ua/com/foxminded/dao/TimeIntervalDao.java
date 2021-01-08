@@ -16,22 +16,26 @@ public class TimeIntervalDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void insertTimeInterval(TimeInterval timeInterval) {
-        String sql = "INSERT INTO t_time_intervals(begin_time, end_time) VALUES(?,?)";
-        jdbcTemplate.update(sql, timeInterval.getBegin(), timeInterval.getEnd());
+    public Long add(TimeInterval timeInterval) {
+        String sql = "INSERT INTO t_time_intervals(begin_time, end_time) VALUES(?,?) RETURNING time_interval_id";
+        LocalDateTime begin = timeInterval.getBegin();
+        LocalDateTime end = timeInterval.getEnd();
+
+        long timeIntervalId = jdbcTemplate.queryForObject(sql, new Object[] { begin, end }, Long.class);
+        return timeIntervalId;
     }
 
-    public List<TimeInterval> getTimeIntervalsById(int id) {
-        String sql = "SELECT* FROM t_time_intervals WHERE time_interval_id = '" + id + "'";
-        return jdbcTemplate.query(sql, new TimeIntervalRowMapper());
+    public List<TimeInterval> getById(long id) {
+        String sql = "SELECT* FROM t_time_intervals WHERE time_interval_id = ?";
+        return jdbcTemplate.query(sql, new Object[] { id }, new TimeIntervalRowMapper());
     }
 
-    public void updateTimeIntervalById(int id, LocalDateTime begin, LocalDateTime end) {
+    public void updateById(long id, LocalDateTime begin, LocalDateTime end) {
         String sql = "UPDATE time_intervals SET begin_time = ?, end_time = ? WHERE time_interval_id = ?";
         jdbcTemplate.update(sql, begin, end, id);
     }
 
-    public void deleteTimeIntervalById(int id) {
+    public void deleteById(long id) {
         String sql = "DELETE FROM time_intervals WHERE time_interval_id = ?";
         jdbcTemplate.update(sql, id);
     }

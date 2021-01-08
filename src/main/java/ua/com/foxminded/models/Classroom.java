@@ -2,7 +2,7 @@ package ua.com.foxminded.models;
 
 public class Classroom {
     private int roomNumber;
-    private int id;
+    private long id;
     private ClassroomInaccessibility inaccessibility;
 
     public Classroom(int roomNumber) {
@@ -13,11 +13,11 @@ public class Classroom {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

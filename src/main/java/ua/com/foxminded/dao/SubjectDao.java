@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import ua.com.foxminded.models.Group;
 import ua.com.foxminded.models.Subject;
 import ua.com.foxminded.models.Teacher;
+import ua.com.foxminded.rowmapper.GroupIdRowMapper;
 import ua.com.foxminded.rowmapper.SubjectRowMapper;
+import ua.com.foxminded.rowmapper.TeacherIdRowMapper;
 
 @Repository
 public class SubjectDao {
@@ -18,84 +20,59 @@ public class SubjectDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    TeacherDao teacherDao;
+    public long add(Subject subject) {
+        String sql = "INSERT INTO t_subject(sibject_name) VALUES (?) RETURNING subject_id";
+        String subjectName = subject.getSubjectName();
 
-    @Autowired
-    GroupDao groupDao;
-
-    public void insertSubject(Subject subject) {
-        String sql = "INSERT INTO t_subject(sibject_name) VALUES (?)";
-        jdbcTemplate.update(sql, subject.getSubjectName());
+        long subjectId = jdbcTemplate.queryForObject(sql, new Object[] { subjectName }, Long.class);
+        return subjectId;
     }
 
-    public void deleteSubjectById(int id) {
+    public void deleteById(long id) {
         String sql = "DELETE FROM t_subject WHERE subject_id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    public List<Subject> getSubjectById(int id) {
-        String sql = "SELECT* FROM t_subject WHERE subject_id = '" + id + "'";
-        return jdbcTemplate.query(sql, new SubjectRowMapper());
+    public List<Subject> getById(long id) {
+        String sql = "SELECT* FROM t_subject WHERE subject_id = ?";
+        return jdbcTemplate.query(sql, new Object[] { id }, new SubjectRowMapper());
     }
 
-    public void assignTeacherForSubject(int teacherId, int subjectId) {
+    public void assignTeacherForSubject(long teacherId, long subjectId) {
         String sql = "INSERT INTO t_subject_teacher_relation(subject_id, teacher_id) VALUES(?, ?)";
         jdbcTemplate.update(sql, subjectId, teacherId);
     }
 
-    public void removeTeacherFromSubject(int teacherId, int subjectId) {
+    public void removeTeacherFromSubject(long teacherId, long subjectId) {
         String sql = "DELETE FROM t_subject_teacher_relation WHERE subject_id = ? , teacher_id = ?";
         jdbcTemplate.update(sql, subjectId, teacherId);
     }
 
-    public void assignGroupForSubject(int groupId, int subjectId) {
+    public void assignGroupForSubject(long groupId, long subjectId) {
         String sql = "INSERT INTO t_subject_groups_relation(subject_id, group_id) VALUES(?, ?)";
         jdbcTemplate.update(sql, subjectId, groupId);
     }
 
-    public void removeGroupFromSubject(int groupId, int subjectId) {
+    public void removeGroupFromSubject(long groupId, long subjectId) {
         String sql = "DELETE FROM t_subject_groups_relation WHERE subject_id = ? , group_id = ?";
         jdbcTemplate.update(sql, subjectId, groupId);
     }
 
-    private List<Integer> getTeachersIdRelatesSubject(int subjectId) {
-        List<Integer> teachersId = new ArrayList<>();
-        String sql = "SELECT teachers_id FROM t_subject_teacher_relation WHERE subject_id = '" + subjectId + "'";
+    public List<Long> getTeachersIdRelatesSubject(long subjectId) {
+        List<Long> teachersId = new ArrayList<>();
+        String sql = "SELECT teachers_id FROM t_subject_teacher_relation WHERE subject_id = ?";
 
-        jdbcTemplate.query(sql, (rs, rowNum) -> {
-            teachersId.add(rs.getInt(1));
-            return teachersId;
-        });
+        teachersId = jdbcTemplate.query(sql, new Object[] { subjectId }, new TeacherIdRowMapper());
 
         return teachersId;
     }
 
-    private List<Teacher> getTeachers(List<Integer> trachersId) {
-        List<Teacher> teachers = new ArrayList<>();
-        for (Integer id : trachersId) {
-            teachers.addAll(teacherDao.getTeacherById(id));
-        }
-        return teachers;
-    }
+    public List<Long> getGroupIdRelatesSuject(long subjectId) {
+        List<Long> groupsId = new ArrayList<>();
+        String sql = "SELECT group_id FROM t_subject_groups_relation WHERE subject_id = ?";
 
-    private List<Integer> getGroupIdRelatesSuject(int subjectId) {
-        List<Integer> groupsId = new ArrayList<>();
-        String sql = "SELECT group_id FROM t_subject_groups_relation WHERE subject_id = '" + subjectId + "'";
-
-        jdbcTemplate.query(sql, (rs, rowNum) -> {
-            groupsId.add(rs.getInt(1));
-            return groupsId;
-        });
+        groupsId = jdbcTemplate.query(sql, new Object[] { subjectId }, new GroupIdRowMapper());
 
         return groupsId;
-    }
-
-    private List<Group> getGroups(List<Integer> subjectsId) {
-        List<Group> groups = new ArrayList<>();
-        for (Integer id : subjectsId) {
-            groups.addAll(groupDao.getGroupById(id));
-        }
-        return groups;
     }
 }

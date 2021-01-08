@@ -13,7 +13,7 @@ public class SubjectRowMapper implements RowMapper<Subject> {
     public Subject mapRow(ResultSet rs, int rowNum) throws SQLException {
         Subject subject = new Subject();
 
-        subject.setId(rs.getInt(1));
+        subject.setId(rs.getLong(1));
         subject.setSubjectName(rs.getString(2));
         return subject;
     }

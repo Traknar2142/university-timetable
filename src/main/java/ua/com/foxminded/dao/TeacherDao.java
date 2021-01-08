@@ -15,23 +15,27 @@ public class TeacherDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public void insertTeacher(Teacher teacher) {
-        String sql = "INSERT INTO t_teachers(first_name, last_name) VALUES(?,?)";
-        jdbcTemplate.update(sql, teacher.getFirstName(), teacher.getLastName());
+    public Long add(Teacher teacher) {
+        String sql = "INSERT INTO t_teachers(first_name, last_name) VALUES(?,?) RETURNING teacher_id";
+        String firstName = teacher.getFirstName();
+        String lastName = teacher.getLastName();
+
+        long teacherId = jdbcTemplate.queryForObject(sql, new Object[] { firstName, lastName }, Long.class);
+        return teacherId;
     }
 
-    public void updateTeacher(int id, String newFirstName, String newLastName) {
+    public void update(long id, String newFirstName, String newLastName) {
         String sql = "UPDATE t_teachers SET first_name = ?, last_name = ? WHERE teacher_id = ?";
         jdbcTemplate.update(sql, newFirstName, newLastName, id);
     }
 
-    public void deleteTeacherById(int id) {
+    public void deleteById(long id) {
         String sql = "DELETE FROM t_teachers WHERE teacher_id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    public List<Teacher> getTeacherById(int id) {
-        String sql = "SELECT* FROM t_teachers WHERE teacher_id = '" + id + "'";
-        return jdbcTemplate.query(sql, new TeacherRowMapper());
+    public List<Teacher> getById(long id) {
+        String sql = "SELECT* FROM t_teachers WHERE teacher_id = ?";
+        return jdbcTemplate.query(sql, new Object[] { id }, new TeacherRowMapper());
     }
 }

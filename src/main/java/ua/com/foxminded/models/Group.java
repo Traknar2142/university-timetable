@@ -3,7 +3,7 @@ package ua.com.foxminded.models;
 import java.util.Set;
 
 public class Group {
-    private int id;
+    private long id;
     private String groupName;
     private Set<Subject> studiedSubjects;
 
@@ -14,11 +14,11 @@ public class Group {
     public Group() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
